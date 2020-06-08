@@ -21,8 +21,8 @@ currency_type   = "CAD"   # Currency Symbol to show when calculating cost to run
 #   max31855spi - kernel SPI interface
 #   max6675 - bitbang SPI interface
 max6675 = 1
-
-
+max31855 = 0
+max31855spi = 0
 ########################################################################
 #
 #   GPIO Setup (BCM SoC Numbering Schema)
