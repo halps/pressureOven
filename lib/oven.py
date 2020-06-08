@@ -192,9 +192,15 @@ class Oven (threading.Thread):
             self.heat = 0.0
             if gpio_available:
                if config.heater_invert:
-                 GPIO.output(config.gpio_heat, GPIO.HIGH)
+                 GPIO.output(config.gpio_heatA, GPIO.HIGH)
+                 GPIO.output(config.gpio_heatB, GPIO.HIGH) 
+                 GPIO.output(config.gpio_heatC, GPIO.HIGH) 
+                 GPIO.output(config.gpio_heatD, GPIO.HIGH)
                else:
-                 GPIO.output(config.gpio_heat, GPIO.LOW)
+                 GPIO.output(config.gpio_heatA, GPIO.LOW)
+                 GPIO.output(config.gpio_heatB, GPIO.LOW)
+                 GPIO.output(config.gpio_heatC, GPIO.LOW)
+                 GPIO.output(config.gpio_heatD, GPIO.LOW)
 
     def set_cool(self, value):
         if value:
