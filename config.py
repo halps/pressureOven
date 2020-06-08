@@ -5,7 +5,7 @@ import logging
 #   General options
 
 ### Logging
-log_level = logging.INFO
+log_level = logging.DEBUG
 log_format = '%(asctime)s %(levelname)s %(name)s: %(message)s'
 
 ### Server
@@ -14,7 +14,14 @@ listening_port = 8081
 
 ### Cost Estimate
 kwh_rate        = 0.26  # Rate in currency_type to calculate cost to run job
-currency_type   = "EUR"   # Currency Symbol to show when calculating cost to run job
+currency_type   = "CAD"   # Currency Symbol to show when calculating cost to run job
+
+### Thermocouple Adapter selection:
+#   max31855 - bitbang SPI interface
+#   max31855spi - kernel SPI interface
+#   max6675 - bitbang SPI interface
+max6675 = 1
+
 
 ########################################################################
 #
@@ -26,33 +33,33 @@ currency_type   = "EUR"   # Currency Symbol to show when calculating cost to run
 #   can use whichever GPIO you prefer/have available.
 
 ### Outputs
-gpio_heat = 11  # Switches zero-cross solid-state-relay
-gpio_cool = 10  # Regulates PWM for 12V DC Blower
-gpio_air  = 9   # Switches 0-phase det. solid-state-relay
-
+# heaters
+gpio_heatA = 21   # Switches solid-state-relay
+gpio_heatB = 26  # Switches solid-state-relay
+gpio_heatC = 20  # Switches solid-state-relay
+gpio_heatD = 19  # Switches solid-state-relay
+# lights, safety and motors
+gpio_light = 27
+gpio_pressure_relay = 4
 heater_invert = 0 # switches the polarity of the heater control
 
 ### Inputs
-gpio_door = 18
-
-### Thermocouple Adapter selection:
-#   max31855 - bitbang SPI interface
-#   max31855spi - kernel SPI interface
-#   max6675 - bitbang SPI interface
-max31855 = 0
-max6675 = 1
-max31855spi = 0 # if you use this one, you MUST reassign the default GPIO pins
-
+gpio_door = 12
+gpio_cool = 22  # Regulates PWM for 12V DC Blower
+gpio_air  = 25  # Switches 0-phase det. solid-state-relay
 ### Thermocouple Connection (using bitbang interfaces)
-gpio_sensor_cs = 27
-gpio_sensor_clock = 22
-gpio_sensor_data = 17
-
-### Thermocouple SPI Connection (using adafrut drivers + kernel SPI interface)
-spi_sensor_chip_id = 0
+gpio_sensor_cs = 17
+gpio_sensor_clock = 11
+gpio_sensor_data = 9
 
 ### amount of time, in seconds, to wait between reads of the thermocouple
 sensor_time_wait = .5
+
+### hardcoded heater enable for now...
+enable_heat_A = 1
+enable_heat_B = 1
+enable_heat_C = 1
+enable_heat_D = 1
 
 
 ########################################################################

@@ -41,7 +41,11 @@ try:
     import RPi.GPIO as GPIO
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
-    GPIO.setup(config.gpio_heat, GPIO.OUT)
+    GPIO.setup(config.gpio_heatA, GPIO.OUT)
+    GPIO.setup(config.gpio_heatB, GPIO.OUT)
+    GPIO.setup(config.gpio_heatC, GPIO.OUT)
+    GPIO.setup(config.gpio_heatD, GPIO.OUT)
+
     GPIO.setup(config.gpio_cool, GPIO.OUT)
     GPIO.setup(config.gpio_air, GPIO.OUT)
     GPIO.setup(config.gpio_door, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -163,22 +167,39 @@ class Oven (threading.Thread):
     def set_heat(self, value):
         if value > 0:
             self.heat = 1.0
-            if gpio_available:
-               if config.heater_invert:
-                 GPIO.output(config.gpio_heat, GPIO.LOW)
+            if config.heater_invert:
+                 GPIO.output(config.gpio_heatA, GPIO.LOW)
+                 GPIO.output(config.gpio_heatB, GPIO.LOW)
+                 GPIO.output(config.gpio_heatC, GPIO.LOW)
+                 GPIO.output(config.gpio_heatD, GPIO.LOW)
                  time.sleep(self.time_step * value)
-                 GPIO.output(config.gpio_heat, GPIO.HIGH)   
+                 GPIO.output(config.gpio_heatA, GPIO.HIGH)
+                 GPIO.output(config.gpio_heatB, GPIO.HIGH) 
+                 GPIO.output(config.gpio_heatC, GPIO.HIGH) 
+                 GPIO.output(config.gpio_heatD, GPIO.HIGH)    
                else:
-                 GPIO.output(config.gpio_heat, GPIO.HIGH)
+                 GPIO.output(config.gpio_heatA, GPIO.HIGH)
+                 GPIO.output(config.gpio_heatB, GPIO.HIGH)
+                 GPIO.output(config.gpio_heatC, GPIO.HIGH)
+                 GPIO.output(config.gpio_heatD, GPIO.HIGH)
                  time.sleep(self.time_step * value)
-                 GPIO.output(config.gpio_heat, GPIO.LOW)   
+                 GPIO.output(config.gpio_heatA, GPIO.LOW)
+                 GPIO.output(config.gpio_heatB, GPIO.LOW) 
+                 GPIO.output(config.gpio_heatC, GPIO.LOW) 
+                 GPIO.output(config.gpio_heatD, GPIO.LOW)    
         else:
             self.heat = 0.0
             if gpio_available:
                if config.heater_invert:
-                 GPIO.output(config.gpio_heat, GPIO.HIGH)
+                 GPIO.output(config.gpio_heatA, GPIO.HIGH)
+                 GPIO.output(config.gpio_heatB, GPIO.HIGH)
+                 GPIO.output(config.gpio_heatC, GPIO.HIGH)
+                 GPIO.output(config.gpio_heatD, GPIO.HIGH)
                else:
-                 GPIO.output(config.gpio_heat, GPIO.LOW)
+                 GPIO.output(config.gpio_heatA, GPIO.LOW)
+                 GPIO.output(config.gpio_heatB, GPIO.LOW) 
+                 GPIO.output(config.gpio_heatC, GPIO.LOW) 
+                 GPIO.output(config.gpio_heatD, GPIO.LOW) 
 
     def set_cool(self, value):
         if value:
