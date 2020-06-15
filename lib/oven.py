@@ -170,22 +170,22 @@ class Oven (threading.Thread):
             if gpio_available:
                if config.heater_invert:
                  GPIO.output(config.gpio_heatA, GPIO.LOW)
-                 GPIO.output(config.gpio_heatB, GPIO.LOW)
+                 #GPIO.output(config.gpio_heatB, GPIO.LOW)
                  GPIO.output(config.gpio_heatC, GPIO.LOW)
                  GPIO.output(config.gpio_heatD, GPIO.LOW)
                  time.sleep(self.time_step * value)
                  GPIO.output(config.gpio_heatA, GPIO.HIGH)
-                 GPIO.output(config.gpio_heatB, GPIO.HIGH) 
+                 #GPIO.output(config.gpio_heatB, GPIO.HIGH) 
                  GPIO.output(config.gpio_heatC, GPIO.HIGH) 
                  GPIO.output(config.gpio_heatD, GPIO.HIGH)    
                else:
                  GPIO.output(config.gpio_heatA, GPIO.HIGH)
-                 GPIO.output(config.gpio_heatB, GPIO.HIGH) 
+                 #GPIO.output(config.gpio_heatB, GPIO.HIGH) 
                  GPIO.output(config.gpio_heatC, GPIO.HIGH) 
                  GPIO.output(config.gpio_heatD, GPIO.HIGH)  
                  time.sleep(self.time_step * value)
                  GPIO.output(config.gpio_heatA, GPIO.LOW)
-                 GPIO.output(config.gpio_heatB, GPIO.LOW)
+                 #GPIO.output(config.gpio_heatB, GPIO.LOW)
                  GPIO.output(config.gpio_heatC, GPIO.LOW)
                  GPIO.output(config.gpio_heatD, GPIO.LOW) 
         else:
