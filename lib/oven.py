@@ -126,7 +126,7 @@ class Oven (threading.Thread):
                 
                 self.target = self.profile.get_target_temperature(self.runtime)
 
-                if (self.target > config.max_setpoint)
+                if (self.target > config.max_setpoint):
                     self.target = config.max_setpoint
                     log.info("Set point temp was capped from the profile to %.1f") % (config.max_setpoint))
 
