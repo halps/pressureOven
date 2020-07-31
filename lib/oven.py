@@ -95,7 +95,7 @@ class Oven (threading.Thread):
         self.state = Oven.STATE_IDLE
         self.set_heat(False)
         self.set_cool(False)
-        #self.set_air(False) # we will do something better here at some point
+        self.set_air(False) # we will do something better here at some point
         self.pid = PID(ki=config.pid_ki, kd=config.pid_kd, kp=config.pid_kp)
 
     def run_profile(self, profile):
