@@ -169,7 +169,7 @@ class Oven (threading.Thread):
                 #elif self.temp_sensor.temperature < 180:
                  #   self.set_air(True)
 
-                 #self.set_air(True) #enable the air iterlock to maintain pressure
+                 self.set_air(True) #enable the air iterlock to maintain pressure
 
                 if self.runtime >= self.totaltime:
                     self.reset()
