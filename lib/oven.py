@@ -17,18 +17,20 @@ try:
         from max31855 import MAX31855, MAX31855Error
         log.info("import MAX31855")
     if config.max31855spi:
-        import Adafruit_GPIO.SPI as SPI
-        from max31855spi import MAX31855SPI, MAX31855SPIError
-        log.info("import MAX31855SPI")
-        spi_reserved_gpio = [7, 8, 9, 10, 11]
-        if config.gpio_air in spi_reserved_gpio:
-            raise Exception("gpio_air pin %s collides with SPI pins %s" % (config.gpio_air, spi_reserved_gpio))
-        if config.gpio_cool in spi_reserved_gpio:
-            raise Exception("gpio_cool pin %s collides with SPI pins %s" % (config.gpio_cool, spi_reserved_gpio))
-        if config.gpio_door in spi_reserved_gpio:
-            raise Exception("gpio_door pin %s collides with SPI pins %s" % (config.gpio_door, spi_reserved_gpio))
-        if config.gpio_heat in spi_reserved_gpio:
-            raise Exception("gpio_heat pin %s collides with SPI pins %s" % (config.gpio_heat, spi_reserved_gpio))
+        log.error("not supporting this anymore!")
+        exit()
+        # import Adafruit_GPIO.SPI as SPI
+        # from max31855spi import MAX31855SPI, MAX31855SPIError
+        # log.info("import MAX31855SPI")
+        # spi_reserved_gpio = [7, 8, 9, 10, 11]
+        # if config.gpio_air in spi_reserved_gpio:
+        #     raise Exception("gpio_air pin %s collides with SPI pins %s" % (config.gpio_air, spi_reserved_gpio))
+        # if config.gpio_cool in spi_reserved_gpio:
+        #     raise Exception("gpio_cool pin %s collides with SPI pins %s" % (config.gpio_cool, spi_reserved_gpio))
+        # if config.gpio_door in spi_reserved_gpio:
+        #     raise Exception("gpio_door pin %s collides with SPI pins %s" % (config.gpio_door, spi_reserved_gpio))
+        # if config.gpio_heat in spi_reserved_gpio:
+        #     raise Exception("gpio_heat pin %s collides with SPI pins %s" % (config.gpio_heat, spi_reserved_gpio))
     if config.max6675:
         from max6675 import MAX6675, MAX6675Error
         log.info("import MAX6675")
@@ -45,12 +47,17 @@ try:
     GPIO.setup(config.gpio_heatB, GPIO.OUT)
     GPIO.setup(config.gpio_heatC, GPIO.OUT)
     GPIO.setup(config.gpio_heatD, GPIO.OUT)
+    GPIO.setup(config.gpio_pressure_relay, GPIO.OUT)
+    GPIO.output(config.gpio_pressure_relay, GPIO.HIGH) #for now as long as the controller is running, we will enable the air
 
+    #legacy stuff that needs to be cleaned up
     GPIO.setup(config.gpio_cool, GPIO.OUT)
-    GPIO.setup(config.gpio_air, GPIO.OUT)
     GPIO.setup(config.gpio_door, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     gpio_available = True
+
+    
+
 except ImportError:
     msg = "Could not initialize GPIOs, oven operation will only be simulated!"
     log.warning(msg)
@@ -88,7 +95,7 @@ class Oven (threading.Thread):
         self.state = Oven.STATE_IDLE
         self.set_heat(False)
         self.set_cool(False)
-        self.set_air(False)
+        #self.set_air(False) # we will do something better here at some point
         self.pid = PID(ki=config.pid_ki, kd=config.pid_kd, kp=config.pid_kp)
 
     def run_profile(self, profile):
@@ -116,7 +123,14 @@ class Oven (threading.Thread):
                     runtime_delta = datetime.datetime.now() - self.start_time
                     self.runtime = runtime_delta.total_seconds()
                 log.info("running at %.1f deg C (Target: %.1f) , heat %.2f, cool %.2f, air %.2f, door %s (%.1fs/%.0f)" % (self.temp_sensor.temperature, self.target, self.heat, self.cool, self.air, self.door, self.runtime, self.totaltime))
+                
                 self.target = self.profile.get_target_temperature(self.runtime)
+
+                if (self.target > config.max_setpoint)
+                    self.target = config.max_setpoint
+                    log.info("Set point temp was capped from the profile to %.1f") % (config.max_setpoint))
+
+
                 pid = self.pid.compute(self.target, self.temp_sensor.temperature)
 
                 log.info("pid: %.3f" % pid)
@@ -150,10 +164,12 @@ class Oven (threading.Thread):
                 #    self.set_heat(False)
                 #    self.set_cool(self.temp_sensor.temperature > self.target)
 
-                if self.temp_sensor.temperature > 200:
-                    self.set_air(False)
-                elif self.temp_sensor.temperature < 180:
-                    self.set_air(True)
+                #if self.temp_sensor.temperature > 200:
+                 #   self.set_air(False)
+                #elif self.temp_sensor.temperature < 180:
+                 #   self.set_air(True)
+
+                 #self.set_air(True) #enable the air iterlock to maintain pressure
 
                 if self.runtime >= self.totaltime:
                     self.reset()
@@ -216,11 +232,11 @@ class Oven (threading.Thread):
         if value:
             self.air = 1.0
             if gpio_available:
-                GPIO.output(config.gpio_air, GPIO.LOW)
+               # GPIO.output(config.gpio_air, GPIO.LOW)
         else:
             self.air = 0.0
             if gpio_available:
-                GPIO.output(config.gpio_air, GPIO.HIGH)
+               # GPIO.output(config.gpio_air, GPIO.HIGH)
 
     def get_state(self):
         state = {

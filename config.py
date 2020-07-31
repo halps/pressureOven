@@ -40,7 +40,8 @@ gpio_heatC = 20  # Switches solid-state-relay
 gpio_heatD = 19  # Switches solid-state-relay
 # lights, safety and motors
 gpio_light = 27
-gpio_pressure_relay = 4
+#gpio_pressure_relay = 4
+gpio_pressure_relay = 13
 heater_invert = 0 # switches the polarity of the heater control
 
 ### Inputs
@@ -60,6 +61,9 @@ enable_heat_A = 1
 enable_heat_B = 1
 enable_heat_C = 1
 enable_heat_D = 1
+
+### max permitted setpoint for the oven
+max_setpoint = 125
 
 
 ########################################################################
