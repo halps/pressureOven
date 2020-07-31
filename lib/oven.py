@@ -48,7 +48,7 @@ try:
     GPIO.setup(config.gpio_heatC, GPIO.OUT)
     GPIO.setup(config.gpio_heatD, GPIO.OUT)
     GPIO.setup(config.gpio_pressure_relay, GPIO.OUT)
-    GPIO.output(config.gpio_pressure_relay, GPIO.HIGH) #for now as long as the controller is running, we will enable the air
+    
 
     #legacy stuff that needs to be cleaned up
     GPIO.setup(config.gpio_cool, GPIO.OUT)
@@ -237,6 +237,7 @@ class Oven (threading.Thread):
             self.air = 0.0
             #if gpio_available:
                # GPIO.output(config.gpio_air, GPIO.HIGH)
+        GPIO.output(config.gpio_pressure_relay, GPIO.HIGH) #for now as long as the controller is running, we will enable the air
 
     def get_state(self):
         state = {
