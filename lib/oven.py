@@ -231,11 +231,11 @@ class Oven (threading.Thread):
     def set_air(self, value):
         if value:
             self.air = 1.0
-            if gpio_available:
+            #if gpio_available:
                # GPIO.output(config.gpio_air, GPIO.LOW)
         else:
             self.air = 0.0
-            if gpio_available:
+            #if gpio_available:
                # GPIO.output(config.gpio_air, GPIO.HIGH)
 
     def get_state(self):
